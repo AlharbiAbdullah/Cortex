@@ -293,6 +293,21 @@ class SilverLayerMixin:
             logger.error(f"Failed to get file from Silver: {e}")
             raise
 
+    def get_silver_file_to_path(self, silver_key: str, local_path: str) -> None:
+        """
+        Download Silver file to local path.
+
+        Args:
+            silver_key: Key in Silver bucket.
+            local_path: Local filesystem path to save file.
+        """
+        try:
+            self.client.fget_object(self.silver_bucket, silver_key, local_path)
+            logger.info(f"Downloaded Silver file to: {local_path}")
+        except Exception as e:
+            logger.error(f"Failed to download Silver file: {e}")
+            raise
+
     def delete_from_silver(self, silver_key: str) -> None:
         """Delete file from Silver layer."""
         try:

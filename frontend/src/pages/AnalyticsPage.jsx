@@ -3,7 +3,17 @@ import { Link } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import ChatInterface from '../components/ChatInterface'
 
-function ChatPage() {
+const ANALYTICS_PHRASES = [
+  "What insights are you looking for?",
+  "Need a chart or graph?",
+  "Want to analyze trends?",
+  "Ask me about your data...",
+  "Looking for ML predictions?",
+  "What metrics should we explore?",
+  "Ready to visualize your data?",
+]
+
+function AnalyticsPage() {
   return (
     <div className="h-full flex flex-col relative">
       {/* Header */}
@@ -23,10 +33,10 @@ function ChatPage() {
 
       {/* Main Chat Area */}
       <div className="flex-1 overflow-hidden relative z-10">
-        <ChatInterface />
+        <ChatInterface showOptions={false} phrases={ANALYTICS_PHRASES} />
       </div>
     </div>
   )
 }
 
-export default ChatPage
+export default AnalyticsPage

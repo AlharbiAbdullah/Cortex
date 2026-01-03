@@ -140,6 +140,102 @@ services:
       timeout: 5s
       retries: 5
 
+  # Apache Superset (BI Dashboards)
+  superset:
+    build:
+      context: ./superset
+      dockerfile: Dockerfile
+    container_name: cortex-superset
+    ports:
+      - "8088:8088"
+    environment:
+      - SUPERSET_SECRET_KEY=cortex-superset-secret-key-change-in-production
+      - SUPERSET_DATABASE_URI=postgresql://superset:superset@superset-db:5432/superset
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./superset/superset_config.py:/app/pythonpath/superset_config.py
+      - superset_home:/app/superset_home
+    networks:
+      - cortex-network
+    depends_on:
+      superset-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    command: >
+      bash -c "
+        superset db upgrade &&
+        superset fab create-admin --username admin --firstname Admin --lastname User --email admin@cortex.local --password admin || true &&
+        superset init &&
+        superset run -h 0.0.0.0 -p 8088 --with-threads --reload
+      "
+
+  # Superset PostgreSQL Database
+  superset-db:
+    image: postgres:15-alpine
+    container_name: cortex-superset-db
+    environment:
+      - POSTGRES_DB=superset
+      - POSTGRES_USER=superset
+      - POSTGRES_PASSWORD=superset
+    volumes:
+      - superset_db_data:/var/lib/postgresql/data
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U superset"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Dremio (Self-Service Analytics)
+  dremio:
+    image: dremio/dremio-oss:latest
+    container_name: cortex-dremio
+    ports:
+      - "31010:31010" # ODBC/JDBC
+      - "32010:32010" # Arrow Flight
+    volumes:
+      - dremio_data:/opt/dremio/data
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9047"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # Dremio Proxy (removes X-Frame-Options for iframe embedding)
+  dremio-proxy:
+    image: nginx:alpine
+    container_name: cortex-dremio-proxy
+    ports:
+      - "9047:80"
+    volumes:
+      - ./dremio/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - cortex-network
+    depends_on:
+      dremio:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # Neo4j Graph Database (Knowledge Graph - Optional)
   neo4j:
     image: neo4j:5-community
@@ -181,3 +277,6 @@ volumes:
   redis_data:
   neo4j_data:
   neo4j_logs:
+  superset_home:
+  superset_db_data:
+  dremio_data:

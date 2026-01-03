@@ -105,6 +105,8 @@ docker compose ps
 | **Frontend** | http://localhost:3000 | React UI |
 | **Backend API** | http://localhost:8000 | FastAPI |
 | **API Docs** | http://localhost:8000/docs | Swagger UI |
+| **Superset** | http://localhost:8088 | BI Dashboards |
+| **Dremio** | http://localhost:9047 | Self-Service Analytics |
 | **MinIO Console** | http://localhost:9001 | Object Storage |
 
 ---
@@ -273,6 +275,8 @@ docker compose up -d
 | PostgreSQL | 5432 | postgres/postgres |
 | MinIO | 9000/9001 | minioadmin/minioadmin123 |
 | Redis | 6379 | - |
+| Superset | 8088 | admin/admin |
+| Dremio | 9047 | First-time setup (see below) |
 
 ### With Neo4j (Full Profile)
 
@@ -283,6 +287,74 @@ docker compose --profile full up -d
 | Service | Port | Credentials |
 |---------|------|-------------|
 | Neo4j | 7474/7687 | neo4j/password123 |
+
+---
+
+## BI Tools Configuration
+
+### Apache Superset (Dashboards)
+
+Superset is a modern data exploration and visualization platform.
+
+**Access**: http://localhost:8088
+
+**Default Credentials**:
+- Username: `admin`
+- Password: `admin`
+
+**Getting Started**:
+1. Navigate to http://localhost:8088
+2. Log in with `admin` / `admin`
+3. Go to **Settings** → **Database Connections** to add data sources
+4. Connect to the Cortex PostgreSQL database:
+   - Host: `db`
+   - Port: `5432`
+   - Database: `cortex_db`
+   - Username: `postgres`
+   - Password: `postgres`
+5. Create charts and dashboards from **Charts** → **+ Chart**
+
+**Key Features**:
+- SQL Lab for ad-hoc queries
+- Drag-and-drop dashboard builder
+- 40+ visualization types
+- Scheduled reports and alerts
+
+### Dremio (Self-Service Analytics)
+
+Dremio is a data lakehouse platform for self-service analytics.
+
+**Access**: http://localhost:9047
+
+**First-Time Setup**:
+1. Navigate to http://localhost:9047
+2. Create an admin account (first user becomes admin):
+   - Recommended: `admin` / `admin123`
+3. Complete the setup wizard
+
+**Connecting to Data Sources**:
+1. Click **Add Source** in the left panel
+2. Add MinIO (S3-compatible):
+   - Source Type: **Amazon S3**
+   - Name: `cortex-datalake`
+   - AWS Access Key: `minioadmin`
+   - AWS Secret Key: `minioadmin123`
+   - Endpoint: `http://minio:9000`
+   - Enable **Path Style Access**
+3. Add PostgreSQL:
+   - Source Type: **PostgreSQL**
+   - Name: `cortex-db`
+   - Host: `db`
+   - Port: `5432`
+   - Database: `cortex_db`
+   - Username: `postgres`
+   - Password: `postgres`
+
+**Key Features**:
+- Query data lake files (Parquet, JSON, CSV) with SQL
+- Virtual datasets and data curation
+- High-performance Arrow Flight queries
+- Semantic layer for business-friendly data access
 
 ---
 

@@ -3,7 +3,17 @@ import { Link } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import ChatInterface from '../components/ChatInterface'
 
-function ChatPage() {
+const EXTRACT_PHRASES = [
+  "What format do you need?",
+  "Drop a file to convert...",
+  "Need data in JSON format?",
+  "Which table should I extract?",
+  "Want CSV, Excel, or JSON?",
+  "Ready to transform your data...",
+  "What data should I extract?",
+]
+
+function ExtractPage() {
   return (
     <div className="h-full flex flex-col relative">
       {/* Header */}
@@ -23,10 +33,10 @@ function ChatPage() {
 
       {/* Main Chat Area */}
       <div className="flex-1 overflow-hidden relative z-10">
-        <ChatInterface />
+        <ChatInterface showOptions={false} phrases={EXTRACT_PHRASES} />
       </div>
     </div>
   )
 }
 
-export default ChatPage
+export default ExtractPage

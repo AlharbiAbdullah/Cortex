@@ -236,7 +236,7 @@ class DatabaseService:
 
     def save_predefined_context(
         self, category: str, context_text: str, sample_content: str | None = None
-    ) -> MetadataContextStore:
+    ) -> int:
         """
         Save a predefined context (used by seeding script).
 
@@ -246,7 +246,7 @@ class DatabaseService:
             sample_content: Optional example content.
 
         Returns:
-            Created or updated MetadataContextStore.
+            Context ID of created or updated MetadataContextStore.
         """
         with self.get_session() as session:
             existing = (
@@ -264,7 +264,8 @@ class DatabaseService:
                     existing.sample_content = sample_content
                 existing.updated_at = datetime.now(timezone.utc)
                 session.flush()
-                return existing
+                context_id = existing.context_id
+                return context_id
 
             context = MetadataContextStore(
                 category=category,
@@ -275,7 +276,8 @@ class DatabaseService:
             )
             session.add(context)
             session.flush()
-            return context
+            context_id = context.context_id
+            return context_id
 
     def save_learned_context(
         self,
@@ -352,6 +354,8 @@ class DatabaseService:
         reasoning: str,
         pipeline_routed_to: str,
         context_ids_used: list[int] | None = None,
+        additional_categories: list[str] | None = None,
+        category_scores: dict[str, float] | None = None,
     ) -> RoutingDecision:
         """
         Save a routing decision for auditing and learning.
@@ -363,6 +367,8 @@ class DatabaseService:
             reasoning: LLM reasoning for classification.
             pipeline_routed_to: Target pipeline.
             context_ids_used: IDs of contexts used in classification.
+            additional_categories: Additional categories (not stored, for future use).
+            category_scores: Per-category scores (not stored, for future use).
 
         Returns:
             Created RoutingDecision.

@@ -695,12 +695,12 @@ def seed_predefined_contexts() -> tuple[int, int]:
 
     for ctx_data in PREDEFINED_CONTEXTS:
         try:
-            context = db_service.save_predefined_context(
+            context_id = db_service.save_predefined_context(
                 category=ctx_data["category"],
                 context_text=ctx_data["context_text"],
                 sample_content=ctx_data["sample_content"],
             )
-            print(f"✓ Saved/Updated: {ctx_data['category'].upper()} (ID: {context.id})")
+            print(f"✓ Saved/Updated: {ctx_data['category'].upper()} (ID: {context_id})")
             success_count += 1
         except Exception as e:
             print(f"✗ Error saving {ctx_data['category']}: {e}")

@@ -51,7 +51,7 @@ def fetch_context_node(state: RouterState) -> dict:
         learned = db_service.get_top_learned_contexts(limit=10)
 
         # Track context IDs for later usage update
-        context_ids = [ctx["id"] for ctx in predefined + learned]
+        context_ids = [ctx["context_id"] for ctx in predefined + learned]
 
         logs.append(
             f"Fetched {len(predefined)} predefined contexts, {len(learned)} learned contexts"

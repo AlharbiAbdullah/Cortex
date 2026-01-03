@@ -6,6 +6,13 @@ import NeuralNetworkBackground from './components/NeuralNetworkBackground'
 import LandingPage from './pages/LandingPage'
 import AIPage from './pages/AIPage'
 import BIPage from './pages/BIPage'
+import BIDashboardPage from './pages/BIDashboardPage'
+import BISelfServicePage from './pages/BISelfServicePage'
+import ChatPage from './pages/ChatPage'
+import SummarizationPage from './pages/SummarizationPage'
+import DataQualityPage from './pages/DataQualityPage'
+import ExtractPage from './pages/ExtractPage'
+import AnalyticsPage from './pages/AnalyticsPage'
 
 function AppLayout() {
   const location = useLocation()
@@ -24,7 +31,14 @@ function AppLayout() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/ai" element={<AIPage />} />
+          <Route path="/ai/chat" element={<ChatPage />} />
+          <Route path="/ai/analytics" element={<AnalyticsPage />} />
+          <Route path="/ai/summarize" element={<SummarizationPage />} />
+          <Route path="/ai/quality" element={<DataQualityPage />} />
+          <Route path="/ai/extract" element={<ExtractPage />} />
           <Route path="/bi" element={<BIPage />} />
+          <Route path="/bi/dashboard" element={<BIDashboardPage />} />
+          <Route path="/bi/selfservice" element={<BISelfServicePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

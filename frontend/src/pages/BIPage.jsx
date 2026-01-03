@@ -1,158 +1,143 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { FiArrowLeft, FiGrid, FiDatabase, FiFileText, FiExternalLink } from 'react-icons/fi'
+import React, { useState, useRef, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { FiArrowLeft, FiGrid, FiDatabase, FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import NeuralNetworkBackground from '../components/NeuralNetworkBackground'
 
 const BI_SERVICES = [
   {
     id: 'dashboard',
     name: 'Dashboards',
-    icon: FiGrid,
     description: 'Interactive KPI dashboards powered by Apache Superset',
-    embedUrl: 'http://localhost:8088',
-    color: 'blue'
+    icon: FiGrid,
+    path: '/bi/dashboard'
   },
   {
     id: 'self-service',
     name: 'Self-Service Analytics',
-    icon: FiDatabase,
     description: 'Ad-hoc queries and data exploration with Dremio',
-    embedUrl: 'http://localhost:9047',
-    color: 'cyan'
+    icon: FiDatabase,
+    path: '/bi/selfservice'
   },
 ]
 
 function BIPage() {
-  const [activeService, setActiveService] = useState('dashboard')
+  const navigate = useNavigate()
+  const servicesRef = useRef(null)
 
-  const currentService = BI_SERVICES.find(s => s.id === activeService)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const updateScrollButtons = () => {
+    if (servicesRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = servicesRef.current
+      setCanScrollLeft(scrollLeft > 0)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1)
+    }
+  }
+
+  useEffect(() => {
+    updateScrollButtons()
+  }, [])
+
+  const handleServiceClick = (service) => {
+    navigate(service.path)
+  }
+
+  const scrollServices = (direction) => {
+    if (servicesRef.current) {
+      const scrollAmount = 236 // card width (220px) + gap (16px)
+      servicesRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      })
+      // Update button visibility after scroll animation
+      setTimeout(updateScrollButtons, 300)
+    }
+  }
 
   return (
-    <div className="h-full flex">
-      {/* Sidebar */}
-      <aside className="w-64 flex-shrink-0 border-r border-white/5 bg-[#0f1c16]/40 flex flex-col">
-        {/* Header */}
-        <div className="p-4 border-b border-white/5">
-          <Link to="/" className="flex items-center gap-2 text-emerald-50/50 hover:text-white transition-colors">
-            <FiArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Home</span>
-          </Link>
-        </div>
+    <div className="relative h-full overflow-hidden flex flex-col items-center justify-center px-6">
+      {/* Neural Network Background */}
+      <NeuralNetworkBackground className="opacity-60" />
 
-        {/* Logo */}
-        <div className="p-4 border-b border-white/5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center">
-              <FiGrid className="w-5 h-5 text-blue-400" />
-            </div>
-            <div>
-              <h1 className="font-bold text-white">BI Platform</h1>
-              <p className="text-xs text-blue-300/50">Business Intelligence</p>
-            </div>
-          </div>
-        </div>
+      {/* Back Button */}
+      <div className="absolute top-6 left-6 z-20">
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-2 text-sm text-emerald-300/70 hover:text-emerald-200 transition-colors py-2 px-4 rounded-xl hover:bg-white/5"
+        >
+          <FiArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+          Back
+        </Link>
+      </div>
 
-        {/* Services */}
-        <nav className="flex-1 p-3 space-y-1">
-          <div className="px-3 py-2">
-            <span className="text-xs font-medium text-emerald-50/30 uppercase tracking-wider">Services</span>
-          </div>
-          {BI_SERVICES.map((service) => (
-            <button
-              key={service.id}
-              onClick={() => setActiveService(service.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left ${
-                activeService === service.id
-                  ? 'bg-blue-500/10 text-white border border-blue-500/20'
-                  : 'text-emerald-50/50 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <service.icon className="w-4 h-4" />
-              <div>
-                <div className="text-sm font-medium">{service.name}</div>
-                <div className="text-xs text-emerald-50/30 line-clamp-1">{service.description}</div>
-              </div>
-            </button>
-          ))}
-        </nav>
-
-        {/* Quick Links */}
-        <div className="p-4 border-t border-white/5">
-          <div className="text-xs text-emerald-50/30 mb-2">Direct Access</div>
-          <div className="space-y-2">
-            <a
-              href="http://localhost:8088"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-blue-400/70 hover:text-blue-400 transition-colors"
-            >
-              <FiExternalLink className="w-3 h-3" />
-              Superset
-            </a>
-            <a
-              href="http://localhost:9047"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-cyan-400/70 hover:text-cyan-400 transition-colors"
-            >
-              <FiExternalLink className="w-3 h-3" />
-              Dremio
-            </a>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <currentService.icon className="w-5 h-5 text-blue-400" />
-            <div>
-              <h2 className="font-semibold text-white">{currentService.name}</h2>
-              <p className="text-xs text-emerald-50/40">{currentService.description}</p>
+      {/* Logo and Title */}
+      <div className="text-center mb-8 relative z-10">
+        <div className="flex justify-center mb-6">
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full scale-150" />
+            <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-emerald-400/30 to-emerald-600/30 flex items-center justify-center">
+              <span className="text-6xl font-bold text-emerald-400/90 drop-shadow-2xl">C</span>
             </div>
           </div>
-          <a
-            href={currentService.embedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/10 text-blue-400 text-sm hover:bg-blue-500/20 transition-colors"
+        </div>
+
+        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight">
+          <span className="bg-gradient-to-r from-emerald-200/90 via-teal-100/70 to-white/60 bg-clip-text text-transparent">
+            CortexBI
+          </span>
+        </h1>
+        <p className="mt-3 text-xl text-emerald-50/50">Business Intelligence Services</p>
+      </div>
+
+      {/* Services Section */}
+      <div className="w-full max-w-4xl relative z-10">
+        <div className="flex items-center justify-center gap-4">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scrollServices('left')}
+            className={`flex-shrink-0 w-12 h-12 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 flex items-center justify-center transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 ${
+              canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
           >
-            <FiExternalLink className="w-4 h-4" />
-            Open in new tab
-          </a>
-        </header>
+            <FiChevronLeft className="w-6 h-6" />
+          </button>
 
-        {/* Embedded Content */}
-        <div className="flex-1 relative">
-          <iframe
-            src={currentService.embedUrl}
-            title={currentService.name}
-            className="absolute inset-0 w-full h-full border-0"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"
-          />
-
-          {/* Fallback Message */}
-          <div className="absolute inset-0 flex items-center justify-center bg-[#0c1612] pointer-events-none opacity-0 transition-opacity iframe-fallback">
-            <div className="text-center">
-              <currentService.icon className="w-16 h-16 mx-auto mb-4 text-blue-400/20" />
-              <h3 className="text-xl font-medium text-white/80 mb-2">Loading {currentService.name}...</h3>
-              <p className="text-emerald-50/40 mb-4">
-                If the content doesn't load, the service may not be running.
-              </p>
-              <a
-                href={currentService.embedUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors pointer-events-auto"
+          {/* Services Container */}
+          <div
+            ref={servicesRef}
+            className="flex gap-4 overflow-x-hidden justify-center"
+            onScroll={updateScrollButtons}
+          >
+            {BI_SERVICES.map((service) => (
+              <button
+                key={service.id}
+                onClick={() => handleServiceClick(service)}
+                className="flex-shrink-0 group flex flex-col items-start gap-2 p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 text-left transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10"
+                style={{ width: '220px' }}
               >
-                <FiExternalLink className="w-4 h-4" />
-                Open directly
-              </a>
-            </div>
+                <div className="flex items-center gap-3 w-full">
+                  <service.icon className="w-6 h-6 text-emerald-400" />
+                  <span className="text-white font-semibold">{service.name}</span>
+                  <FiArrowRight className="w-4 h-4 ml-auto text-emerald-400 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </div>
+                <p className="text-sm text-emerald-50/50 leading-relaxed">{service.description}</p>
+              </button>
+            ))}
           </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scrollServices('right')}
+            className={`flex-shrink-0 w-12 h-12 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 flex items-center justify-center transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 ${
+              canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          >
+            <FiChevronRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
     </div>
   )
 }
