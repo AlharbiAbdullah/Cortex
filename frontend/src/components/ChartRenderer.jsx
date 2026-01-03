@@ -17,9 +17,10 @@ import {
   Area,
 } from 'recharts'
 
+// Gruvbox-inspired color palette
 const COLORS = [
-  '#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#ef4444',
-  '#ec4899', '#6366f1', '#14b8a6', '#f97316', '#84cc16'
+  '#8ec07c', '#83a598', '#d3869b', '#fabd2f', '#fb4934',
+  '#b8bb26', '#fe8019', '#689d6a', '#458588', '#b16286'
 ]
 
 // Parse data from Python-like code or detect data patterns
@@ -241,10 +242,10 @@ function ChartRenderer({ content }) {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-gray-900/95 border border-emerald-500/30 rounded-lg px-3 py-2 shadow-xl">
-          <p className="text-emerald-400 text-sm font-medium">{formatXAxis(label)}</p>
+        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }} className="rounded-lg px-3 py-2 shadow-xl">
+          <p style={{ color: 'var(--accent)' }} className="text-sm font-medium">{formatXAxis(label)}</p>
           {payload.map((entry, index) => (
-            <p key={index} className="text-white text-sm">
+            <p key={index} style={{ color: 'var(--text-primary)' }} className="text-sm">
               {entry.name}: {typeof entry.value === 'number' ? `$${entry.value.toFixed(2)}` : entry.value}
             </p>
           ))}
@@ -282,23 +283,23 @@ function ChartRenderer({ content }) {
       case 'bar':
         return (
           <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
             <XAxis
               dataKey={xKey}
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={formatXAxis}
               angle={-45}
               textAnchor="end"
               height={60}
             />
             <YAxis
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey={yKey} fill="#10b981" radius={[4, 4, 0, 0]} />
+            <Bar dataKey={yKey} fill="#8ec07c" radius={[4, 4, 0, 0]} />
           </BarChart>
         )
 
@@ -307,30 +308,30 @@ function ChartRenderer({ content }) {
           <AreaChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
             <defs>
               <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#8ec07c" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#8ec07c" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
             <XAxis
               dataKey={xKey}
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={formatXAxis}
               angle={-45}
               textAnchor="end"
               height={60}
             />
             <YAxis
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey={yKey}
-              stroke="#10b981"
+              stroke="#8ec07c"
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorAmount)"
@@ -342,29 +343,29 @@ function ChartRenderer({ content }) {
       default:
         return (
           <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
             <XAxis
               dataKey={xKey}
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={formatXAxis}
               angle={-45}
               textAnchor="end"
               height={60}
             />
             <YAxis
-              stroke="rgba(255,255,255,0.5)"
-              tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 12 }}
+              stroke="var(--text-muted)"
+              tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Line
               type="monotone"
               dataKey={yKey}
-              stroke="#10b981"
+              stroke="#8ec07c"
               strokeWidth={2}
-              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, fill: '#34d399' }}
+              dot={{ fill: '#8ec07c', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: '#b8bb26' }}
             />
           </LineChart>
         )
@@ -372,9 +373,9 @@ function ChartRenderer({ content }) {
   }
 
   return (
-    <div className="my-4 p-4 bg-black/20 rounded-xl border border-emerald-500/20">
+    <div className="my-4 p-4 rounded-xl" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
       {title && (
-        <h3 className="text-emerald-400 text-sm font-medium mb-4 text-center">{title}</h3>
+        <h3 className="text-sm font-medium mb-4 text-center" style={{ color: 'var(--accent)' }}>{title}</h3>
       )}
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">

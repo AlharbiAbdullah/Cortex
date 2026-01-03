@@ -10,7 +10,6 @@ import {
   FiBarChart2,
   FiCheckCircle
 } from 'react-icons/fi'
-import { HiOutlineSparkles } from 'react-icons/hi2'
 
 function Sidebar() {
   const biServices = [
@@ -30,12 +29,13 @@ function Sidebar() {
     <NavLink
       to={item.to}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all ${
-          isActive
-            ? 'bg-emerald-500/10 text-white border border-emerald-500/20'
-            : 'text-emerald-50/50 hover:text-white hover:bg-white/5 border border-transparent'
-        }`
+        `flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all border`
       }
+      style={({ isActive }) => ({
+        background: isActive ? 'var(--accent-muted)' : 'transparent',
+        color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+        borderColor: isActive ? 'var(--border-color)' : 'transparent'
+      })}
     >
       <item.icon className="w-4 h-4" />
       <span className="font-medium text-sm">{item.label}</span>
@@ -43,20 +43,11 @@ function Sidebar() {
   )
 
   return (
-    <aside className="w-64 md:w-72 flex flex-col h-full rounded-3xl border border-white/5 shadow-2xl bg-[#0f1c16]/60 backdrop-blur-sm">
+    <aside className="w-64 md:w-72 flex flex-col h-full rounded-3xl shadow-2xl backdrop-blur-sm" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
       {/* Logo */}
-      <div className="p-5 border-b border-white/5">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="relative">
-            <div className="absolute inset-0 bg-emerald-500/30 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <HiOutlineSparkles className="w-5 h-5 text-white" />
-            </div>
-          </div>
-          <div>
-            <h1 className="font-bold text-white text-lg tracking-tight">Cortex</h1>
-            <p className="text-xs text-emerald-50/40">Enterprise Intelligence</p>
-          </div>
+      <div className="p-5" style={{ borderBottom: '1px solid var(--border-color)' }}>
+        <Link to="/" className="block">
+          <h1 className="font-bold text-2xl tracking-tight" style={{ color: 'var(--color-text)' }}>Cortex</h1>
         </Link>
       </div>
 
@@ -64,7 +55,8 @@ function Sidebar() {
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         <Link
           to="/"
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-emerald-50/50 hover:text-white hover:bg-white/5 transition-all"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all"
+          style={{ color: 'var(--text-muted)' }}
         >
           <FiHome className="w-4 h-4" />
           <span className="font-medium text-sm">Home</span>
@@ -72,7 +64,7 @@ function Sidebar() {
 
         {/* BI Platform */}
         <div className="pt-4 pb-2 px-4">
-          <span className="text-xs font-medium text-emerald-50/30 uppercase tracking-wider">
+          <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
             BI Platform
           </span>
         </div>
@@ -82,7 +74,7 @@ function Sidebar() {
 
         {/* AI Platform */}
         <div className="pt-4 pb-2 px-4">
-          <span className="text-xs font-medium text-emerald-50/30 uppercase tracking-wider">
+          <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
             AI Platform
           </span>
         </div>
@@ -92,11 +84,11 @@ function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-white/5">
-        <div className="flex items-center justify-between text-xs text-emerald-50/30">
+      <div className="p-4" style={{ borderTop: '1px solid var(--border-color)' }}>
+        <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-muted)' }}>
           <span>All Services</span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
             Active
           </span>
         </div>

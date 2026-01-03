@@ -1,6 +1,15 @@
 # Cortex Testing Guide
 
-This guide provides test scenarios and sample questions for validating Cortex AI services using the auto-seeded sample data.
+```
+  ████████╗███████╗███████╗████████╗██╗███╗   ██╗ ██████╗
+  ╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝██║████╗  ██║██╔════╝
+     ██║   █████╗  ███████╗   ██║   ██║██╔██╗ ██║██║  ███╗
+     ██║   ██╔══╝  ╚════██║   ██║   ██║██║╚██╗██║██║   ██║
+     ██║   ███████╗███████║   ██║   ██║██║ ╚████║╚██████╔╝
+     ╚═╝   ╚══════╝╚══════╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝
+```
+
+This guide provides test scenarios and sample questions for validating Cortex AI and BI services using the auto-seeded sample data.
 
 ---
 
@@ -13,7 +22,8 @@ This guide provides test scenarios and sample questions for validating Cortex AI
 5. [Summarize Service](#summarize-service)
 6. [Data Quality Service](#data-quality-service)
 7. [Extract Service](#extract-service)
-8. [API Testing with cURL](#api-testing-with-curl)
+8. [BI Tools Testing](#bi-tools-testing)
+9. [API Testing with cURL](#api-testing-with-curl)
 
 ---
 
@@ -358,6 +368,177 @@ customer_id,name,email,order_amount,order_date,status,country
 | "Pull all monetary amounts" | $10,800, $6,000, $2,400, etc. |
 | "Extract all person names" | John Smith, Sarah Johnson, Michael Brown, etc. |
 | "Get all company names" | Acme Corporation, First National Bank |
+
+---
+
+## BI Tools Testing
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      BI TOOLS TESTING                           │
+├────────────────────────────┬────────────────────────────────────┤
+│        Superset            │            Dremio                  │
+│        :8088               │            :9047                   │
+│   ┌────────────────┐       │       ┌────────────────┐           │
+│   │  Dashboards    │       │       │  SQL Workbench │           │
+│   │  SQL Lab       │       │       │  Data Catalog  │           │
+│   │  Charts        │       │       │  Virtual Data  │           │
+│   └────────────────┘       │       └────────────────┘           │
+└────────────────────────────┴────────────────────────────────────┘
+```
+
+### Apache Superset Testing
+
+**URL**: http://localhost:8088
+**Credentials**: `admin` / `admin`
+
+#### 1. Login Test
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Navigate to http://localhost:8088 | Login page loads |
+| 2 | Enter `admin` / `admin` | Dashboard appears |
+| 3 | Click user icon (top right) | Profile menu visible |
+
+#### 2. Database Connection Test
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Go to Settings → Database Connections | Connection list appears |
+| 2 | Click "+ Database" | Connection dialog opens |
+| 3 | Select PostgreSQL | Form appears |
+| 4 | Enter: Host=`db`, Port=`5432`, DB=`cortex_db`, User=`postgres`, Pass=`postgres` | Connection validates |
+| 5 | Test Connection | "Connection looks good!" |
+
+#### 3. SQL Lab Test Queries
+
+Navigate to **SQL Lab** → **SQL Editor** and run:
+
+```sql
+-- Test 1: Check documents table
+SELECT * FROM documents LIMIT 10;
+
+-- Test 2: Count by category
+SELECT primary_category, COUNT(*)
+FROM documents
+GROUP BY primary_category
+ORDER BY COUNT(*) DESC;
+
+-- Test 3: Recent documents
+SELECT filename, primary_category, created_at
+FROM documents
+ORDER BY created_at DESC
+LIMIT 5;
+```
+
+#### 4. Chart Creation Test
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Go to Charts → + Chart | Chart type selection |
+| 2 | Select "Bar Chart" | Dataset selection |
+| 3 | Choose documents dataset | Chart builder opens |
+| 4 | Set X-axis: `primary_category` | Categories appear |
+| 5 | Set Metric: `COUNT(*)` | Bar chart renders |
+| 6 | Click "Create Chart" | Chart saved |
+
+---
+
+### Dremio Testing
+
+**URL**: http://localhost:9047
+**First-time Setup**: Create admin account (e.g., `admin` / `admin123`)
+
+#### 1. Initial Setup Test
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Navigate to http://localhost:9047 | Setup wizard appears |
+| 2 | Create admin user | Account created |
+| 3 | Complete wizard | Dashboard loads |
+
+#### 2. Add MinIO (S3) Source
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Click "+ Add Source" | Source type list |
+| 2 | Select "Amazon S3" | Configuration form |
+| 3 | Name: `cortex-datalake` | Name accepted |
+| 4 | Access Key: `minioadmin` | |
+| 5 | Secret Key: `minioadmin123` | |
+| 6 | Endpoint: `http://minio:9000` | |
+| 7 | Enable "Path Style Access" | |
+| 8 | Save | Source connected |
+
+#### 3. Browse Data Lake
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Expand `cortex-datalake` | Buckets visible |
+| 2 | Navigate to `bronze` bucket | Raw files listed |
+| 3 | Navigate to `silver` bucket | Processed files listed |
+| 4 | Click on a JSON/Parquet file | Schema detected |
+
+#### 4. SQL Query Tests
+
+Navigate to **SQL Runner** and test:
+
+```sql
+-- Test 1: Query Bronze bucket (if files exist)
+SELECT * FROM "cortex-datalake".bronze."file.json" LIMIT 10;
+
+-- Test 2: Query Silver bucket
+SELECT * FROM "cortex-datalake".silver."document.json" LIMIT 10;
+
+-- Test 3: Basic aggregation
+SELECT
+    category,
+    COUNT(*) as doc_count
+FROM "cortex-datalake".silver."documents"
+GROUP BY category;
+```
+
+#### 5. Add PostgreSQL Source
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Click "+ Add Source" | Source type list |
+| 2 | Select "PostgreSQL" | Configuration form |
+| 3 | Name: `cortex-db` | |
+| 4 | Host: `db`, Port: `5432` | |
+| 5 | Database: `cortex_db` | |
+| 6 | Username: `postgres`, Password: `postgres` | |
+| 7 | Save | Source connected |
+
+#### 6. Cross-Source Query Test
+
+```sql
+-- Join data lake with PostgreSQL metadata
+SELECT
+    m.filename,
+    m.primary_category,
+    m.created_at
+FROM "cortex-db".public.documents m
+ORDER BY m.created_at DESC
+LIMIT 10;
+```
+
+---
+
+### BI Tools Health Check
+
+Run these checks to verify BI tools are working:
+
+```bash
+# Superset health
+curl -s http://localhost:8088/health | jq
+
+# Dremio health
+curl -s http://localhost:9047 -o /dev/null -w "%{http_code}"
+
+# MinIO health (for Dremio data source)
+curl -s http://localhost:9000/minio/health/live
+```
 
 ---
 

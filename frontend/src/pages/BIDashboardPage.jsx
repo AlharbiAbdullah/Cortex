@@ -6,28 +6,46 @@ function BIDashboardPage() {
   const supersetUrl = 'http://localhost:8088'
 
   return (
-    <div className="relative h-full overflow-hidden flex flex-col bg-[#0c1612]">
+    <div className="relative h-full overflow-hidden flex flex-col" style={{ background: 'var(--bg-primary)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-emerald-500/10">
+      <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid var(--border-color)' }}>
         <div className="flex items-center gap-4">
           <Link
             to="/bi"
-            className="group inline-flex items-center gap-2 text-sm text-emerald-300/70 hover:text-emerald-200 transition-colors py-2 px-3 rounded-lg hover:bg-white/5"
+            className="group inline-flex items-center gap-2 text-sm transition-colors py-2 px-3 rounded-lg"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--text-primary)'
+              e.currentTarget.style.background = 'var(--card-bg)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)'
+              e.currentTarget.style.background = 'transparent'
+            }}
           >
             <FiArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             Back
           </Link>
-          <div className="h-6 w-px bg-emerald-500/20" />
+          <div className="h-6 w-px" style={{ background: 'var(--border-color)' }} />
           <div className="flex items-center gap-2">
-            <FiGrid className="w-5 h-5 text-emerald-400" />
-            <h1 className="text-lg font-semibold text-white">Dashboards</h1>
+            <FiGrid className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+            <h1 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Dashboards</h1>
           </div>
         </div>
         <a
           href={supersetUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-emerald-300/70 hover:text-emerald-200 transition-colors py-2 px-3 rounded-lg hover:bg-white/5"
+          className="inline-flex items-center gap-2 text-sm transition-colors py-2 px-3 rounded-lg"
+          style={{ color: 'var(--text-muted)' }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--text-primary)'
+            e.currentTarget.style.background = 'var(--card-bg)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--text-muted)'
+            e.currentTarget.style.background = 'transparent'
+          }}
         >
           Open in new tab
           <FiExternalLink className="w-4 h-4" />

@@ -103,7 +103,7 @@ function ReportsPage() {
     <div className="h-full overflow-auto p-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white mb-2">Report Generation</h1>
-        <p className="text-emerald-50/50">Generate formatted reports from templates</p>
+        <p style={{ color: 'var(--text-muted)' }}>Generate formatted reports from templates</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -111,7 +111,7 @@ function ReportsPage() {
         <div className="lg:col-span-1 space-y-4">
           <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <FiLayout className="text-emerald-400" />
+              <FiLayout style={{ color: 'var(--accent)' }} />
               Templates
             </h2>
             <div className="space-y-2">
@@ -122,14 +122,14 @@ function ReportsPage() {
                     setSelectedTemplate(template.id)
                     setReportData({})
                   }}
-                  className={`w-full p-4 rounded-xl text-left transition-colors ${
-                    selectedTemplate === template.id
-                      ? 'bg-emerald-500/10 border border-emerald-500/20'
-                      : 'bg-white/[0.02] border border-white/5 hover:bg-white/[0.04]'
-                  }`}
+                  className="w-full p-4 rounded-xl text-left transition-colors"
+                  style={{
+                    background: selectedTemplate === template.id ? 'var(--accent-muted)' : 'var(--card-bg)',
+                    border: selectedTemplate === template.id ? '1px solid var(--accent)' : '1px solid var(--border-color)'
+                  }}
                 >
-                  <div className="font-medium text-white">{template.name}</div>
-                  <div className="text-sm text-emerald-50/50">{template.description}</div>
+                  <div className="font-medium" style={{ color: 'var(--text-primary)' }}>{template.name}</div>
+                  <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{template.description}</div>
                 </button>
               ))}
             </div>
@@ -143,11 +143,11 @@ function ReportsPage() {
                 <button
                   key={format}
                   onClick={() => setOutputFormat(format)}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                    outputFormat === format
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-white/[0.05] text-emerald-50/70 hover:bg-white/[0.1]'
-                  }`}
+                  className="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors"
+                  style={{
+                    background: outputFormat === format ? 'var(--accent)' : 'var(--card-bg)',
+                    color: outputFormat === format ? 'var(--bg-primary)' : 'var(--text-secondary)'
+                  }}
                 >
                   {format.toUpperCase()}
                 </button>
@@ -167,7 +167,8 @@ function ReportsPage() {
               {selectedTemplate && sampleData[selectedTemplate] && (
                 <button
                   onClick={loadSampleData}
-                  className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
+                  className="text-sm transition-colors"
+                  style={{ color: 'var(--accent)' }}
                 >
                   Load Sample Data
                 </button>
@@ -186,20 +187,26 @@ function ReportsPage() {
                     }
                   }}
                   placeholder="Enter report data as JSON..."
-                  className="w-full h-64 p-4 rounded-xl bg-white/[0.03] border border-white/5 text-white placeholder-emerald-50/30 focus:outline-none focus:border-emerald-500/50 font-mono text-sm resize-none"
+                  className="w-full h-64 p-4 rounded-xl font-mono text-sm resize-none focus:outline-none"
+                  style={{
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)'
+                  }}
                 />
 
                 <button
                   onClick={handleGenerateReport}
                   disabled={loading || Object.keys(reportData).length === 0}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                  style={{ background: 'var(--accent)', color: 'var(--bg-primary)' }}
                 >
                   <FiFileText className="w-4 h-4" />
                   {loading ? 'Generating...' : 'Generate Report'}
                 </button>
               </div>
             ) : (
-              <div className="text-center py-12 text-emerald-50/50">
+              <div className="text-center py-12" style={{ color: 'var(--text-muted)' }}>
                 <FiLayout className="w-12 h-12 mx-auto mb-4 opacity-30" />
                 <p>Select a template to get started</p>
               </div>
@@ -208,21 +215,22 @@ function ReportsPage() {
 
           {/* Generated Report */}
           {generatedReport && (
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6">
+            <div className="rounded-2xl p-6" style={{ border: '1px solid var(--accent)', background: 'var(--accent-muted)' }}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-white">Report Generated</h2>
+                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Report Generated</h2>
                 {generatedReport.download_url && (
                   <a
                     href={`http://localhost:8000${generatedReport.download_url}`}
                     download
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors"
+                    style={{ background: 'var(--accent)', color: 'var(--bg-primary)' }}
                   >
                     <FiDownload className="w-4 h-4" />
                     Download
                   </a>
                 )}
               </div>
-              <div className="text-emerald-50/70">
+              <div style={{ color: 'var(--text-secondary)' }}>
                 <p>Filename: {generatedReport.filename || 'report.' + outputFormat}</p>
                 <p>Format: {outputFormat.toUpperCase()}</p>
                 {generatedReport.size && <p>Size: {(generatedReport.size / 1024).toFixed(1)} KB</p>}

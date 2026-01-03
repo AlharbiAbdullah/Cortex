@@ -25,10 +25,7 @@ const MODELS = [
 
 const EXPERTS = [
   { id: 'general', name: 'General' },
-  { id: 'political', name: 'Political' },
-  { id: 'intelligence', name: 'Intel' },
-  { id: 'data_analytics', name: 'Analytics' },
-  { id: 'media', name: 'Media' },
+  { id: 'data_analytics', name: 'Analyst' },
 ]
 
 function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
@@ -72,14 +69,13 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
     setLoading(true)
 
     try {
-      const timeout = selectedExpert === 'media' ? 300000 : 120000
       const response = await axios.post('/api/chat', {
         message: userMessage,
         conversation_history: newMessages.slice(-10),
         use_rag: true,
         model_name: selectedModel,
         expert: selectedExpert,
-      }, { timeout })
+      }, { timeout: 120000 })
 
       const assistantMessage = {
         role: 'assistant',
@@ -121,17 +117,9 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
           /* Empty State - Elegant with Typewriter */
           <div className="h-full flex flex-col items-center justify-center">
             <div className="text-center">
-              <div className="flex justify-center mb-4">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full scale-150" />
-                  <div className="relative w-40 h-40 rounded-full bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 flex items-center justify-center">
-                    <span className="text-6xl font-bold text-emerald-400/80">C</span>
-                  </div>
-                </div>
-              </div>
-              <h1 className="text-2xl font-light tracking-wide text-white/80 font-display h-9 flex items-center justify-center">
+              <h1 className="text-2xl font-light tracking-wide font-display h-9 flex items-center justify-center" style={{ color: 'var(--text-secondary)' }}>
                 <span>{typewriterText}</span>
-                <span className="ml-0.5 w-0.5 h-6 bg-emerald-400/70 animate-blink" />
+                <span className="ml-0.5 w-0.5 h-6 animate-blink" style={{ background: 'var(--accent)' }} />
               </h1>
             </div>
           </div>
@@ -150,20 +138,20 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                 <div className={`max-w-[80%] ${message.role === 'user' ? 'text-right' : ''}`}>
                   {message.role === 'assistant' && (
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-                      <span className="text-[11px] font-medium text-emerald-400/70 uppercase tracking-wider font-display">
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+                      <span className="text-[11px] font-medium uppercase tracking-wider font-display" style={{ color: 'var(--accent)' }}>
                         {getExpert(message.expert).name}
                       </span>
                     </div>
                   )}
 
                   {message.role === 'assistant' ? (
-                    <div className="prose text-[15px] leading-[1.8] text-white/85">
+                    <div className="prose text-[15px] leading-[1.8]" style={{ color: 'var(--text-primary)' }}>
                       {containsChartData(message.content) ? (
                         <>
                           <ChartRenderer content={message.content} />
                           {extractSummary(message.content) && (
-                            <p className="mt-4 text-white/70 text-sm leading-relaxed">
+                            <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                               {extractSummary(message.content)}
                             </p>
                           )}
@@ -173,7 +161,7 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                       )}
                     </div>
                   ) : (
-                    <p className="text-[15px] leading-[1.8] text-white/60 font-display">
+                    <p className="text-[15px] leading-[1.8] font-display" style={{ color: 'var(--text-muted)' }}>
                       {message.content}
                     </p>
                   )}
@@ -182,7 +170,8 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                     <a
                       href={`/api/download/${message.excel_file}`}
                       download
-                      className="inline-flex items-center gap-2 mt-3 text-emerald-400/70 text-sm font-display hover:text-emerald-400 transition-colors"
+                      className="inline-flex items-center gap-2 mt-3 text-sm font-display transition-colors"
+                      style={{ color: 'var(--accent)' }}
                     >
                       <FiDownload className="w-3.5 h-3.5" />
                       <span>Download file</span>
@@ -195,8 +184,8 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
             {loading && (
               <div className="flex justify-start">
                 <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-emerald-400/60 rounded-full animate-pulse" />
-                  <span className="text-sm text-white/40 font-display">Thinking...</span>
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
+                  <span className="text-sm font-display" style={{ color: 'var(--text-muted)' }}>Thinking...</span>
                 </div>
               </div>
             )}
@@ -214,7 +203,7 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 mb-5">
               {/* Persona Selection */}
               <div className="flex-1">
-                <label className="block text-[10px] uppercase tracking-wider text-white/30 font-display mb-2 ml-1">
+                <label className="block text-[10px] uppercase tracking-wider font-display mb-2 ml-1" style={{ color: 'var(--text-muted)' }}>
                   Persona
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -223,11 +212,12 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                       key={expert.id}
                       onClick={() => setSelectedExpert(expert.id)}
                       disabled={loading}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-medium font-display transition-all duration-200 ${
-                        selectedExpert === expert.id
-                          ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                          : 'text-white/40 border border-white/10 hover:border-white/20 hover:text-white/60'
-                      }`}
+                      className="px-3.5 py-1.5 rounded-full text-xs font-medium font-display transition-all duration-200"
+                      style={{
+                        background: selectedExpert === expert.id ? 'var(--accent-muted)' : 'transparent',
+                        color: selectedExpert === expert.id ? 'var(--accent)' : 'var(--text-muted)',
+                        border: selectedExpert === expert.id ? '1px solid var(--accent)' : '1px solid var(--border-color)'
+                      }}
                     >
                       {expert.name}
                     </button>
@@ -236,11 +226,11 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
               </div>
 
               {/* Divider */}
-              <div className="hidden sm:block w-px h-12 bg-white/10" />
+              <div className="hidden sm:block w-px h-12" style={{ background: 'var(--border-color)' }} />
 
               {/* Model Selection */}
               <div className="sm:w-40">
-                <label className="block text-[10px] uppercase tracking-wider text-white/30 font-display mb-2 ml-1">
+                <label className="block text-[10px] uppercase tracking-wider font-display mb-2 ml-1" style={{ color: 'var(--text-muted)' }}>
                   Model
                 </label>
                 <div className="relative">
@@ -248,15 +238,20 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                     value={selectedModel}
                     onChange={(e) => setSelectedModel(e.target.value)}
                     disabled={loading}
-                    className="w-full appearance-none bg-white/[0.03] text-white/80 text-sm font-display px-3 py-2 pr-8 border border-white/10 rounded-lg cursor-pointer focus:outline-none focus:border-emerald-500/40 hover:border-white/20 transition-colors"
+                    className="w-full appearance-none text-sm font-display px-3 py-2 pr-8 rounded-lg cursor-pointer focus:outline-none transition-colors"
+                    style={{
+                      background: 'var(--card-bg)',
+                      color: 'var(--text-secondary)',
+                      border: '1px solid var(--border-color)'
+                    }}
                   >
                     {MODELS.map((model) => (
-                      <option key={model.id} value={model.id} className="bg-[#0c1612]">
+                      <option key={model.id} value={model.id} style={{ background: 'var(--bg-secondary)' }}>
                         {model.name}
                       </option>
                     ))}
                   </select>
-                  <FiChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+                  <FiChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'var(--text-muted)' }} />
                 </div>
               </div>
             </div>
@@ -265,9 +260,10 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
           {/* Input */}
           <form onSubmit={handleSubmit}>
             <div
-              className={`rounded-2xl border transition-all duration-300 ${
-                inputFocused ? 'border-emerald-500/40' : 'border-white/10'
-              }`}
+              className="rounded-2xl transition-all duration-300"
+              style={{
+                border: inputFocused ? '1px solid var(--accent)' : '1px solid var(--border-color)'
+              }}
             >
               <div className="relative">
                 <textarea
@@ -279,8 +275,13 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                   onBlur={() => setInputFocused(false)}
                   placeholder="Ask anything..."
                   rows={1}
-                  className="w-full bg-transparent text-white/90 placeholder-white/30 text-[15px] font-display pl-5 pr-14 py-4 resize-none focus:outline-none"
-                  style={{ minHeight: '56px', maxHeight: '140px' }}
+                  className="w-full bg-transparent text-[15px] font-display pl-5 pr-14 py-4 resize-none focus:outline-none"
+                  style={{
+                    minHeight: '56px',
+                    maxHeight: '140px',
+                    color: 'var(--text-primary)',
+                    '::placeholder': { color: 'var(--text-muted)' }
+                  }}
                   onInput={(e) => {
                     e.target.style.height = 'auto'
                     e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'
@@ -290,11 +291,11 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
                 <button
                   type="submit"
                   disabled={!input.trim() || loading}
-                  className={`absolute right-3 bottom-3 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                    input.trim() && !loading
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-white/5 text-white/20'
-                  }`}
+                  className="absolute right-3 bottom-3 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
+                  style={{
+                    background: input.trim() && !loading ? 'var(--accent)' : 'var(--card-bg)',
+                    color: input.trim() && !loading ? 'var(--bg-primary)' : 'var(--text-muted)'
+                  }}
                 >
                   <FiSend className="w-4 h-4" />
                 </button>
@@ -326,32 +327,32 @@ function ChatInterface({ showOptions = true, phrases = DEFAULT_PHRASES }) {
 
         .prose p { margin-bottom: 0.75em; }
         .prose p:last-child { margin-bottom: 0; }
-        .prose strong { font-weight: 600; color: #a7f3d0; }
-        .prose a { color: #6ee7b7; text-decoration: underline; }
+        .prose strong { font-weight: 600; color: var(--accent); }
+        .prose a { color: var(--accent); text-decoration: underline; }
         .prose code {
           font-size: 0.875em;
-          background: rgba(255, 255, 255, 0.08);
-          color: #a7f3d0;
+          background: var(--bg-tertiary);
+          color: var(--accent);
           padding: 0.15em 0.4em;
           border-radius: 4px;
         }
         .prose pre {
-          background: rgba(0, 0, 0, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
           padding: 1em;
           overflow-x: auto;
           margin: 0.75em 0;
           border-radius: 8px;
         }
-        .prose pre code { background: none; padding: 0; }
+        .prose pre code { background: none; padding: 0; color: var(--text-primary); }
         .prose ul, .prose ol { padding-left: 1.25em; margin: 0.5em 0; }
         .prose li { margin: 0.25em 0; }
-        .prose li::marker { color: #10b981; }
+        .prose li::marker { color: var(--accent); }
         .prose blockquote {
-          border-left: 2px solid rgba(16, 185, 129, 0.4);
+          border-left: 2px solid var(--accent-muted);
           padding-left: 1em;
           margin: 0.75em 0;
-          color: rgba(255, 255, 255, 0.6);
+          color: var(--text-muted);
         }
 
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

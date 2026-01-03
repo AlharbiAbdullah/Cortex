@@ -2,107 +2,250 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cortex dark theme */
+/* Cortex theme variables - Two-color system */
 :root {
-  --sidebar-bg: #202123;
-  --chat-bg: #343541;
-  --chat-message: #444654;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --font-sans: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Two-color palette */
+  --color-wheat: #BFA87A;
+  --color-dark: #282828;
+
+  /* Light theme (default) - Dark text on wheat background */
+  --color-text: #282828;
+  --color-text-secondary: #282828;
+  --color-bg: #BFA87A;
+  --color-bg-gray: #BFA87A;
+  --color-border: #282828;
+
+  /* Legacy variable mappings */
+  --bg-primary: #BFA87A;
+  --bg-secondary: #BFA87A;
+  --bg-tertiary: #d4c49a;
+
+  --text-primary: #282828;
+  --text-secondary: #282828;
+  --text-muted: rgba(40, 40, 40, 0.7);
+
+  --border-color: rgba(40, 40, 40, 0.3);
+
+  /* Accent uses dark color */
+  --accent: #282828;
+  --accent-light: #3a3a3a;
+  --accent-muted: rgba(40, 40, 40, 0.2);
+  --accent-secondary: #282828;
+
+  /* Card backgrounds */
+  --card-bg: rgba(191, 168, 122, 0.8);
+  --card-hover: rgba(212, 196, 154, 0.9);
+
+  /* Aurora effects using dark tones */
+  --aurora-1: rgba(40, 40, 40, 0.06);
+  --aurora-2: rgba(40, 40, 40, 0.08);
+  --aurora-3: rgba(40, 40, 40, 0.06);
+
+  /* Orbs with dark color */
+  --orb-1: rgba(40, 40, 40, 0.12);
+  --orb-2: rgba(40, 40, 40, 0.10);
+  --orb-3: rgba(40, 40, 40, 0.08);
+
+  /* Single accent color for consistency */
+  --red: #282828;
+  --orange: #282828;
+  --yellow: #282828;
+  --green: #282828;
+  --aqua: #282828;
+  --blue: #282828;
+  --purple: #282828;
+}
+
+/* Dark theme - Wheat text on dark background */
+[data-theme="dark"] {
+  /* Dark theme variables */
+  --color-text: #BFA87A;
+  --color-text-secondary: #BFA87A;
+  --color-bg: #282828;
+  --color-bg-gray: #282828;
+  --color-border: #BFA87A;
+
+  /* Legacy variable mappings */
+  --bg-primary: #282828;
+  --bg-secondary: #282828;
+  --bg-tertiary: #3a3a3a;
+
+  --text-primary: #BFA87A;
+  --text-secondary: #BFA87A;
+  --text-muted: rgba(191, 168, 122, 0.7);
+
+  --border-color: rgba(191, 168, 122, 0.3);
+
+  /* Accent uses wheat color */
+  --accent: #BFA87A;
+  --accent-light: #d4c49a;
+  --accent-muted: rgba(191, 168, 122, 0.2);
+  --accent-secondary: #BFA87A;
+
+  /* Card backgrounds */
+  --card-bg: rgba(40, 40, 40, 0.8);
+  --card-hover: rgba(50, 50, 50, 0.9);
+
+  /* Aurora effects using wheat tones */
+  --aurora-1: rgba(191, 168, 122, 0.08);
+  --aurora-2: rgba(191, 168, 122, 0.12);
+  --aurora-3: rgba(191, 168, 122, 0.10);
+
+  /* Floating orbs with wheat color */
+  --orb-1: rgba(191, 168, 122, 0.25);
+  --orb-2: rgba(191, 168, 122, 0.20);
+  --orb-3: rgba(191, 168, 122, 0.15);
+
+  /* Single accent color for consistency */
+  --red: #BFA87A;
+  --orange: #BFA87A;
+  --yellow: #BFA87A;
+  --green: #BFA87A;
+  --aqua: #BFA87A;
+  --blue: #BFA87A;
+  --purple: #BFA87A;
 }
 
 @layer base {
   * {
-    @apply border-gray-700/50;
+    border-color: var(--border-color);
   }
 
   body {
-    @apply text-gray-100 antialiased;
-    background: #0c1612;
-    color: #e7f0e7;
+    @apply antialiased;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - warm tones */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 rounded-full;
+    background: var(--text-muted);
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
+    background: var(--text-secondary);
   }
 }
 
 @layer components {
-  /* Prose styling for markdown */
+  /* Prose styling for markdown - Gruvbox warm tones */
   .prose {
-    @apply text-gray-200;
+    color: var(--text-secondary);
   }
 
   .prose h1, .prose h2, .prose h3, .prose h4 {
-    @apply text-white font-semibold;
+    color: var(--text-primary);
+    font-weight: 600;
   }
 
   .prose p {
-    @apply mb-4 last:mb-0;
+    margin-bottom: 1rem;
+  }
+
+  .prose p:last-child {
+    margin-bottom: 0;
   }
 
   .prose code {
-    @apply bg-gray-800 px-1.5 py-0.5 rounded text-emerald-400 text-sm;
+    background: var(--bg-tertiary);
+    color: var(--accent);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
   }
 
   .prose pre {
-    @apply bg-gray-900 rounded-lg p-4 overflow-x-auto my-4;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
   }
 
   .prose pre code {
-    @apply bg-transparent p-0 text-gray-200;
+    background: transparent;
+    padding: 0;
+    color: var(--text-primary);
   }
 
   .prose ul, .prose ol {
-    @apply pl-6 mb-4;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .prose li {
-    @apply mb-1;
+    margin-bottom: 0.25rem;
+  }
+
+  .prose li::marker {
+    color: var(--accent);
   }
 
   .prose ul {
-    @apply list-disc;
+    list-style-type: disc;
   }
 
   .prose ol {
-    @apply list-decimal;
+    list-style-type: decimal;
   }
 
   .prose a {
-    @apply text-emerald-400 hover:underline;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .prose a:hover {
+    text-decoration: underline;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-gray-600 pl-4 italic text-gray-400;
+    border-left: 4px solid var(--accent-muted);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--text-muted);
   }
 
   .prose table {
-    @apply w-full border-collapse my-4;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
   }
 
   .prose th, .prose td {
-    @apply border border-gray-700 px-3 py-2 text-left;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
   }
 
   .prose th {
-    @apply bg-gray-800 font-medium;
+    background: var(--bg-tertiary);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .prose strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .prose em {
+    color: var(--yellow);
   }
 }
 
@@ -122,7 +265,7 @@
     text-shadow:
       0 1px 0 rgba(0, 0, 0, 0.35),
       0 14px 44px rgba(0, 0, 0, 0.45),
-      0 0 28px rgba(16, 185, 129, 0.16);
+      0 0 28px rgba(191, 168, 122, 0.2);
     filter: saturate(1.05);
   }
 
@@ -145,12 +288,13 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 18% 18%, rgba(34, 197, 94, 0.16), transparent 35%),
-      radial-gradient(circle at 78% 8%, rgba(12, 83, 54, 0.32), transparent 32%),
-      radial-gradient(circle at 52% 76%, rgba(21, 128, 61, 0.2), transparent 30%);
+      radial-gradient(circle at 18% 18%, var(--aurora-1), transparent 35%),
+      radial-gradient(circle at 78% 8%, var(--aurora-2), transparent 32%),
+      radial-gradient(circle at 52% 76%, var(--aurora-3), transparent 30%);
     filter: blur(70px);
     animation: aurora-move 18s ease-in-out infinite alternate;
     opacity: 0.85;
+    transition: background 0.3s ease;
   }
 
   @keyframes aurora-move {
@@ -165,47 +309,61 @@
     }
   }
 
-  /* Subtle grid overlay with vignette */
+  /* Subtle grid overlay with vignette - adapts to theme */
   .grid-overlay {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(to right, rgba(40, 40, 40, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(40, 40, 40, 0.06) 1px, transparent 1px);
     background-size: 80px 80px;
     mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.55), transparent 70%);
-    opacity: 0.35;
+    opacity: 0.25;
     pointer-events: none;
+    transition: background-image 0.3s ease;
   }
 
-  /* Floating glowing orbs */
+  [data-theme="dark"] .grid-overlay {
+    background-image:
+      linear-gradient(to right, rgba(191, 168, 122, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(191, 168, 122, 0.04) 1px, transparent 1px);
+    opacity: 0.35;
+  }
+
+  /* Floating glowing orbs - two-color system */
   .floating-orb {
     position: absolute;
     width: 320px;
     height: 320px;
     border-radius: 9999px;
     filter: blur(60px);
-    opacity: 0.42;
-    mix-blend-mode: screen;
+    opacity: 0.25;
+    mix-blend-mode: multiply;
     animation: float-slow 24s ease-in-out infinite;
+    transition: background 0.3s ease, opacity 0.3s ease;
+  }
+
+  [data-theme="dark"] .floating-orb {
+    mix-blend-mode: screen;
+    opacity: 0.42;
   }
 
   .floating-orb.orb-1 {
-    background: radial-gradient(circle, rgba(34, 197, 94, 0.55), transparent 55%);
+    background: radial-gradient(circle, var(--orb-1), transparent 55%);
     top: 10%;
     left: -6%;
     animation-delay: 0s;
   }
 
   .floating-orb.orb-2 {
-    background: radial-gradient(circle, rgba(12, 83, 54, 0.55), transparent 55%);
+    background: radial-gradient(circle, var(--orb-2), transparent 55%);
     bottom: 8%;
     right: -6%;
     animation-delay: 5s;
   }
 
   .floating-orb.orb-3 {
-    background: radial-gradient(circle, rgba(156, 163, 175, 0.25), transparent 55%);
+    background: radial-gradient(circle, var(--orb-3), transparent 55%);
     top: 50%;
     left: 50%;
     width: 240px;
@@ -225,15 +383,22 @@
     }
   }
 
-  /* Glass effect for main panels */
+  /* Glass effect for main panels - two-color system */
   .glass-panel {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(12, 26, 18, 0.45));
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(135deg, var(--card-bg), rgba(191, 168, 122, 0.7));
+    border: 1px solid var(--border-color);
     box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      0 20px 60px rgba(40, 40, 40, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+  }
+
+  [data-theme="dark"] .glass-panel {
+    background: linear-gradient(135deg, var(--card-bg), rgba(40, 40, 40, 0.6));
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(191, 168, 122, 0.05);
   }
 
   /* Neural network floating animation */

@@ -55,30 +55,28 @@ function AIPage() {
       <div className="absolute top-6 left-6 z-20">
         <Link
           to="/"
-          className="group inline-flex items-center gap-2 text-sm text-emerald-300/70 hover:text-emerald-200 transition-colors py-2 px-4 rounded-xl hover:bg-white/5"
+          className="group inline-flex items-center gap-2 text-sm transition-colors py-2 px-4 rounded-xl"
+          style={{ color: 'var(--text-muted)' }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--text-primary)'
+            e.currentTarget.style.background = 'var(--card-bg)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--text-muted)'
+            e.currentTarget.style.background = 'transparent'
+          }}
         >
           <FiArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           Back
         </Link>
       </div>
 
-      {/* Logo and Title */}
+      {/* Title */}
       <div className="text-center mb-8 relative z-10">
-        <div className="flex justify-center mb-6">
-          <div className="relative">
-            <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full scale-150" />
-            <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-emerald-400/30 to-emerald-600/30 flex items-center justify-center">
-              <span className="text-6xl font-bold text-emerald-400/90 drop-shadow-2xl">C</span>
-            </div>
-          </div>
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight">
-          <span className="bg-gradient-to-r from-emerald-200/90 via-emerald-100/70 to-white/60 bg-clip-text text-transparent">
-            CortexAI
-          </span>
+        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight" style={{ color: 'var(--accent)' }}>
+          CortexAI
         </h1>
-        <p className="mt-3 text-xl text-emerald-50/50">AI-Powered Intelligence Services</p>
+        <p className="mt-3 text-xl" style={{ color: 'var(--text-muted)' }}>AI-Powered Intelligence Services</p>
       </div>
 
       {/* Services Section */}
@@ -87,9 +85,14 @@ function AIPage() {
           {/* Left Arrow */}
           <button
             onClick={() => scrollServices('left')}
-            className={`flex-shrink-0 w-12 h-12 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 flex items-center justify-center transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 ${
+            className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
               canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
+            style={{
+              border: '1px solid var(--border-color)',
+              background: 'var(--card-bg)',
+              color: 'var(--accent)'
+            }}
           >
             <FiChevronLeft className="w-6 h-6" />
           </button>
@@ -104,15 +107,27 @@ function AIPage() {
               <button
                 key={service.id}
                 onClick={() => handleServiceClick(service)}
-                className="flex-shrink-0 group flex flex-col items-start gap-2 p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 text-left transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10"
-                style={{ width: '220px' }}
+                className="flex-shrink-0 group flex flex-col items-start gap-2 p-5 rounded-2xl text-left transition-all duration-300"
+                style={{
+                  width: '220px',
+                  border: '1px solid var(--border-color)',
+                  background: 'var(--card-bg)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--accent)'
+                  e.currentTarget.style.background = 'var(--card-hover)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)'
+                  e.currentTarget.style.background = 'var(--card-bg)'
+                }}
               >
                 <div className="flex items-center gap-3 w-full">
-                  <service.icon className="w-6 h-6 text-emerald-400" />
-                  <span className="text-white font-semibold">{service.name}</span>
-                  <FiArrowRight className="w-4 h-4 ml-auto text-emerald-400 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                  <service.icon className="w-6 h-6" style={{ color: 'var(--accent)' }} />
+                  <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{service.name}</span>
+                  <FiArrowRight className="w-4 h-4 ml-auto opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" style={{ color: 'var(--accent)' }} />
                 </div>
-                <p className="text-sm text-emerald-50/50 leading-relaxed">{service.description}</p>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{service.description}</p>
               </button>
             ))}
           </div>
@@ -120,9 +135,14 @@ function AIPage() {
           {/* Right Arrow */}
           <button
             onClick={() => scrollServices('right')}
-            className={`flex-shrink-0 w-12 h-12 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 flex items-center justify-center transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-500/10 ${
+            className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
               canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
+            style={{
+              border: '1px solid var(--border-color)',
+              background: 'var(--card-bg)',
+              color: 'var(--accent)'
+            }}
           >
             <FiChevronRight className="w-6 h-6" />
           </button>

@@ -92,28 +92,28 @@ function DocumentsPage() {
     <div className="h-full overflow-auto p-6">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white mb-2">Documents</h1>
-        <p className="text-emerald-50/50">Upload and manage your documents</p>
+        <p style={{ color: 'var(--text-muted)' }}>Upload and manage your documents</p>
       </div>
 
       {/* Upload Zone */}
       <div
         {...getRootProps()}
-        className={`mb-6 border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer ${
-          isDragActive
-            ? 'border-emerald-500 bg-emerald-500/10'
-            : 'border-white/10 hover:border-emerald-500/50 hover:bg-white/[0.02]'
-        }`}
+        className="mb-6 border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer"
+        style={{
+          borderColor: isDragActive ? 'var(--accent)' : 'var(--border-color)',
+          background: isDragActive ? 'var(--accent-muted)' : 'transparent'
+        }}
       >
         <input {...getInputProps()} />
-        <FiUploadCloud className={`w-12 h-12 mx-auto mb-4 ${isDragActive ? 'text-emerald-400' : 'text-emerald-50/30'}`} />
+        <FiUploadCloud className="w-12 h-12 mx-auto mb-4" style={{ color: isDragActive ? 'var(--accent)' : 'var(--text-muted)' }} />
         {uploading ? (
-          <p className="text-emerald-400">Uploading...</p>
+          <p style={{ color: 'var(--accent)' }}>Uploading...</p>
         ) : isDragActive ? (
-          <p className="text-emerald-400">Drop files here...</p>
+          <p style={{ color: 'var(--accent)' }}>Drop files here...</p>
         ) : (
           <>
-            <p className="text-white mb-2">Drag & drop files here, or click to select</p>
-            <p className="text-sm text-emerald-50/40">Supports PDF, DOCX, XLSX, TXT, MD</p>
+            <p className="mb-2" style={{ color: 'var(--text-primary)' }}>Drag & drop files here, or click to select</p>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Supports PDF, DOCX, XLSX, TXT, MD</p>
           </>
         )}
       </div>
@@ -127,7 +127,7 @@ function DocumentsPage() {
           </div>
           <div className="space-y-2">
             {processingJobs.slice(0, 3).map((job, index) => (
-              <div key={index} className="text-sm text-emerald-50/50">
+              <div key={index} className="text-sm" style={{ color: 'var(--text-muted)' }}>
                 {job.filename} - {job.status}
               </div>
             ))}
@@ -138,24 +138,26 @@ function DocumentsPage() {
       {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="flex-1 relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-50/30" />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
           <input
             type="text"
             placeholder="Search documents..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 text-white placeholder-emerald-50/30 focus:outline-none focus:border-emerald-500/50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl focus:outline-none"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
           />
         </div>
         <div className="relative">
-          <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-50/30" />
+          <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 text-white focus:outline-none focus:border-emerald-500/50 appearance-none cursor-pointer"
+            className="pl-10 pr-8 py-2.5 rounded-xl focus:outline-none appearance-none cursor-pointer"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
           >
             {categories.map(cat => (
-              <option key={cat} value={cat} className="bg-[#0f1c16]">
+              <option key={cat} value={cat} style={{ background: 'var(--bg-secondary)' }}>
                 {cat === 'all' ? 'All Categories' : cat.replace(/_/g, ' ')}
               </option>
             ))}
@@ -163,7 +165,8 @@ function DocumentsPage() {
         </div>
         <button
           onClick={() => { fetchDocuments(); fetchJobs(); }}
-          className="px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 text-emerald-50/50 hover:text-white hover:bg-white/[0.05] transition-colors"
+          className="px-4 py-2.5 rounded-xl transition-colors"
+          style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}
         >
           <FiRefreshCw className="w-4 h-4" />
         </button>

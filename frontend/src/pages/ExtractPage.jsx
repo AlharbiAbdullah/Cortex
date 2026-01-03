@@ -21,7 +21,16 @@ function ExtractPage() {
         <div className="flex items-center justify-between">
           <Link
             to="/ai"
-            className="group inline-flex items-center gap-2 text-sm text-emerald-300/70 hover:text-emerald-200 transition-colors py-2 px-4 rounded-xl hover:bg-white/5"
+            className="group inline-flex items-center gap-2 text-sm transition-colors py-2 px-4 rounded-xl"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--text-primary)'
+              e.currentTarget.style.background = 'var(--card-bg)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)'
+              e.currentTarget.style.background = 'transparent'
+            }}
           >
             <FiArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             Back

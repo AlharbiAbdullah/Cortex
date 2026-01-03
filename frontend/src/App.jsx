@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
+import ThemeToggle from './components/ThemeToggle'
 import NeuralNetworkBackground from './components/NeuralNetworkBackground'
 
 // Pages
@@ -19,7 +21,8 @@ function AppLayout() {
   const isLandingPage = location.pathname === '/'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0c1612] text-[#e7f0e7]">
+    <div className="relative min-h-screen overflow-hidden transition-colors duration-300" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+      <ThemeToggle />
       <div className="aurora-bg" />
       <div className="floating-orb orb-1" />
       <div className="floating-orb orb-2" />
@@ -48,9 +51,11 @@ function AppLayout() {
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AppLayout />
+      </Router>
+    </ThemeProvider>
   )
 }
 

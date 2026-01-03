@@ -14,6 +14,24 @@ function NeuralNetworkBackground({ className = '' }) {
     let width = 0
     let height = 0
 
+    // Get theme colors from CSS variables
+    const getThemeColors = () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+      if (isDark) {
+        return {
+          trail: 'rgba(40, 40, 40, 0.22)',
+          node: 'rgba(191, 168, 122, 0.85)',
+          connection: [191, 168, 122]
+        }
+      } else {
+        return {
+          trail: 'rgba(191, 168, 122, 0.22)',
+          node: 'rgba(40, 40, 40, 0.85)',
+          connection: [40, 40, 40]
+        }
+      }
+    }
+
     const createNodes = () => {
       const area = Math.max(width * height, 1)
       const desired = Math.max(224, Math.min(560, Math.floor(area / 3250)))
@@ -39,10 +57,11 @@ function NeuralNetworkBackground({ className = '' }) {
 
     const draw = () => {
       const nodes = nodesRef.current
+      const colors = getThemeColors()
       ctx.clearRect(0, 0, width, height)
 
       // subtle fade for motion trails
-      ctx.fillStyle = 'rgba(12, 22, 18, 0.22)'
+      ctx.fillStyle = colors.trail
       ctx.fillRect(0, 0, width, height)
 
       const maxDist = 170
@@ -60,29 +79,30 @@ function NeuralNetworkBackground({ className = '' }) {
         if (n.x < 0 || n.x > width) n.vx *= -1
         if (n.y < 0 || n.y > height) n.vy *= -1
 
-        // dotted nodes (no shadowBlur for performance)
+        // dotted nodes
         ctx.beginPath()
-        ctx.fillStyle = 'rgba(74, 222, 128, 0.85)'
+        ctx.fillStyle = colors.node
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
         ctx.fill()
       }
 
       // connections
+      const [r, g, b] = colors.connection
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const a = nodes[i]
-          const b = nodes[j]
-          const dx = a.x - b.x
-          const dy = a.y - b.y
+          const bNode = nodes[j]
+          const dx = a.x - bNode.x
+          const dy = a.y - bNode.y
           const dist = Math.hypot(dx, dy)
 
           if (dist < maxDist) {
             const alpha = (1 - dist / maxDist) * 0.35
-            ctx.strokeStyle = `rgba(52, 211, 153, ${alpha})`
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
             ctx.lineWidth = 0.8
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
-            ctx.lineTo(b.x, b.y)
+            ctx.lineTo(bNode.x, bNode.y)
             ctx.stroke()
           }
         }
@@ -95,9 +115,16 @@ function NeuralNetworkBackground({ className = '' }) {
     window.addEventListener('resize', resize)
     animationRef.current = requestAnimationFrame(draw)
 
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      // Theme changed, colors will update on next frame
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current)
       window.removeEventListener('resize', resize)
+      observer.disconnect()
     }
   }, [])
 
