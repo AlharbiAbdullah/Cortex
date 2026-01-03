@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cortex dark theme */
+:root {
+  --sidebar-bg: #202123;
+  --chat-bg: #343541;
+  --chat-message: #444654;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --font-sans: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-gray-700/50;
+  }
+
+  body {
+    @apply text-gray-100 antialiased;
+    background: #0c1612;
+    color: #e7f0e7;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+@layer components {
+  /* Prose styling for markdown */
+  .prose {
+    @apply text-gray-200;
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply text-white font-semibold;
+  }
+
+  .prose p {
+    @apply mb-4 last:mb-0;
+  }
+
+  .prose code {
+    @apply bg-gray-800 px-1.5 py-0.5 rounded text-emerald-400 text-sm;
+  }
+
+  .prose pre {
+    @apply bg-gray-900 rounded-lg p-4 overflow-x-auto my-4;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0 text-gray-200;
+  }
+
+  .prose ul, .prose ol {
+    @apply pl-6 mb-4;
+  }
+
+  .prose li {
+    @apply mb-1;
+  }
+
+  .prose ul {
+    @apply list-disc;
+  }
+
+  .prose ol {
+    @apply list-decimal;
+  }
+
+  .prose a {
+    @apply text-emerald-400 hover:underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-gray-600 pl-4 italic text-gray-400;
+  }
+
+  .prose table {
+    @apply w-full border-collapse my-4;
+  }
+
+  .prose th, .prose td {
+    @apply border border-gray-700 px-3 py-2 text-left;
+  }
+
+  .prose th {
+    @apply bg-gray-800 font-medium;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  .font-brand {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .hero-haze {
+    text-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.35),
+      0 14px 44px rgba(0, 0, 0, 0.45),
+      0 0 28px rgba(16, 185, 129, 0.16);
+    filter: saturate(1.05);
+  }
+
+  /* Animation for typing indicator */
+  @keyframes bounce {
+    0%, 60%, 100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+
+  /* Animated aurora background */
+  .aurora-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 18%, rgba(34, 197, 94, 0.16), transparent 35%),
+      radial-gradient(circle at 78% 8%, rgba(12, 83, 54, 0.32), transparent 32%),
+      radial-gradient(circle at 52% 76%, rgba(21, 128, 61, 0.2), transparent 30%);
+    filter: blur(70px);
+    animation: aurora-move 18s ease-in-out infinite alternate;
+    opacity: 0.85;
+  }
+
+  @keyframes aurora-move {
+    0% {
+      transform: translate3d(-10px, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(0, -10px, 0) scale(1.05);
+    }
+    100% {
+      transform: translate3d(12px, 6px, 0) scale(1.02);
+    }
+  }
+
+  /* Subtle grid overlay with vignette */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.55), transparent 70%);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* Floating glowing orbs */
+  .floating-orb {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 9999px;
+    filter: blur(60px);
+    opacity: 0.42;
+    mix-blend-mode: screen;
+    animation: float-slow 24s ease-in-out infinite;
+  }
+
+  .floating-orb.orb-1 {
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.55), transparent 55%);
+    top: 10%;
+    left: -6%;
+    animation-delay: 0s;
+  }
+
+  .floating-orb.orb-2 {
+    background: radial-gradient(circle, rgba(12, 83, 54, 0.55), transparent 55%);
+    bottom: 8%;
+    right: -6%;
+    animation-delay: 5s;
+  }
+
+  .floating-orb.orb-3 {
+    background: radial-gradient(circle, rgba(156, 163, 175, 0.25), transparent 55%);
+    top: 50%;
+    left: 50%;
+    width: 240px;
+    height: 240px;
+    animation-delay: 10s;
+  }
+
+  @keyframes float-slow {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(18px, -16px, 0) scale(1.05);
+    }
+    100% {
+      transform: translate3d(-14px, 12px, 0) scale(0.98);
+    }
+  }
+
+  /* Glass effect for main panels */
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(12, 26, 18, 0.45));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Neural network floating animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.6;
+    }
+    25% {
+      transform: translate3d(10px, -8px, 0) scale(1.1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translate3d(-5px, -15px, 0) scale(0.9);
+      opacity: 0.4;
+    }
+    75% {
+      transform: translate3d(-8px, 5px, 0) scale(1.05);
+      opacity: 0.7;
+    }
+  }
+
+  .animate-float {
+    animation: float linear infinite;
+  }
+
+  /* Blinking cursor for typewriter effect */
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Hide scrollbar utility */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
