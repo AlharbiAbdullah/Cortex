@@ -200,8 +200,8 @@ async def health_detailed() -> dict:
     }
 
 
-@router.get("/health/ready")
-async def health_ready() -> dict | Response:
+@router.get("/health/ready", response_model=None)
+async def health_ready():
     """
     Readiness probe for Kubernetes/Docker.
 
