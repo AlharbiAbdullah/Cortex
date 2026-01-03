@@ -345,7 +345,6 @@ Cortex/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── pyproject.toml
-├── CLAUDE.md                   # Development guide
 ├── TESTING.md                  # Testing guide
 └── README.md
 ```
@@ -388,6 +387,6 @@ Private repository.
 ## Contributing
 
 1. Create a feature branch: `git checkout -b feature/your-feature`
-2. Make changes following [CLAUDE.md](./CLAUDE.md) guidelines
-3. Run tests: `uv run pytest`
+2. Make changes and run tests: `uv run pytest`
+3. Format code: `uv run ruff format . && uv run ruff check .`
 4. Push and create a Pull Request
