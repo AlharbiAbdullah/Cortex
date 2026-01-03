@@ -1,18 +1,74 @@
 # Cortex
 
-**Document Intelligence Platform** - RAG-powered chat, smart document routing, and automated data processing.
+**Enterprise Intelligence Platform** - Unified BI dashboards, self-service analytics, and AI-powered smart services.
+
+Cortex combines traditional Business Intelligence capabilities with cutting-edge AI services to deliver a comprehensive data and intelligence platform.
+
+---
+
+## Platform Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CORTEX PLATFORM                                 │
+├─────────────────────────────────┬───────────────────────────────────────────┤
+│         BI PLATFORM             │           AI PLATFORM                     │
+├─────────────────────────────────┼───────────────────────────────────────────┤
+│                                 │                                           │
+│  ┌─────────────────────────┐    │    ┌─────────────────────────────────┐   │
+│  │      Dashboards         │    │    │       Smart Router Agent        │   │
+│  │  • KPI Visualization    │    │    │  • 100 Category Classification  │   │
+│  │  • Real-time Metrics    │    │    │  • LLM Ensemble Routing         │   │
+│  │  • Interactive Charts   │    │    │  • Confidence Scoring           │   │
+│  └─────────────────────────┘    │    └─────────────────────────────────┘   │
+│                                 │                                           │
+│  ┌─────────────────────────┐    │    ┌─────────────────────────────────┐   │
+│  │    Self-Service BI      │    │    │        RAG Chat Engine          │   │
+│  │  • Ad-hoc Queries       │    │    │  • Document Q&A                 │   │
+│  │  • Report Builder       │    │    │  • Context-Aware Responses      │   │
+│  │  • Data Exploration     │    │    │  • Multi-Persona Support        │   │
+│  └─────────────────────────┘    │    └─────────────────────────────────┘   │
+│                                 │                                           │
+│  ┌─────────────────────────┐    │    ┌─────────────────────────────────┐   │
+│  │   Report Generation     │    │    │       AI Services Suite         │   │
+│  │  • Scheduled Reports    │    │    │  • Document Summarization       │   │
+│  │  • Multi-format Export  │    │    │  • Semantic Comparison          │   │
+│  │  • Template Library     │    │    │  • Data Quality Assessment      │   │
+│  └─────────────────────────┘    │    └─────────────────────────────────┘   │
+│                                 │                                           │
+└─────────────────────────────────┴───────────────────────────────────────────┘
+```
 
 ---
 
 ## Features
 
-- **Smart Document Routing** - Automatically classify documents into 100 categories using LLM ensemble
-- **RAG-Powered Chat** - Query your documents with context-aware AI responses
-- **Data Lake Architecture** - Bronze/Silver/Gold medallion pattern with MinIO
-- **Document Summarization** - Extract key points, entities, and action items
-- **Document Comparison** - Semantic similarity and diff analysis
-- **Report Generation** - Template-based reports in HTML, PDF, DOCX
-- **Data Quality Assessment** - Profiling, anomaly detection, quality scoring
+### BI Platform Services
+
+| Service | Description |
+|---------|-------------|
+| **Dashboards** | Interactive KPI dashboards with real-time data visualization |
+| **Self-Service Analytics** | Ad-hoc querying and data exploration for business users |
+| **Report Builder** | Drag-and-drop report creation with scheduling |
+| **Data Exploration** | Browse and analyze data without technical expertise |
+
+### AI Platform Services
+
+| Service | Description |
+|---------|-------------|
+| **Smart Router** | Automatically classify documents into 100 categories using LLM ensemble |
+| **RAG Chat** | Query your documents with context-aware AI responses |
+| **Summarization** | Extract key points, entities, and action items from documents |
+| **Comparison** | Semantic similarity analysis and document diff |
+| **Data Quality** | Automated profiling, anomaly detection, and quality scoring |
+
+### Core Infrastructure
+
+| Component | Description |
+|-----------|-------------|
+| **Data Lake** | Bronze/Silver/Gold medallion architecture with MinIO |
+| **Vector Store** | ChromaDB for semantic search and RAG |
+| **Report Engine** | Template-based generation in HTML, PDF, DOCX |
 
 ---
 
@@ -56,38 +112,42 @@ docker compose ps
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Frontend (React)                         │
-│                    http://localhost:3000                         │
-└─────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Backend API (FastAPI)                       │
-│                    http://localhost:8000                         │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────┐ │
-│  │  Upload  │  │   Chat   │  │ Documents│  │ Phase 2 Services │ │
-│  │  Router  │  │  Router  │  │  Router  │  │ (Summarize, etc) │ │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────────┬─────────┘ │
-└───────┼─────────────┼─────────────┼─────────────────┼───────────┘
-        │             │             │                 │
-        ▼             ▼             ▼                 ▼
-┌───────────────┐ ┌─────────┐ ┌──────────┐ ┌──────────────────────┐
-│ Smart Router  │ │   QA    │ │ Document │ │ Summarization │ ...  │
-│    Agent      │ │ Service │ │ Service  │ │    Service          │
-│  (LangGraph)  │ │  (RAG)  │ │          │ │                      │
-└───────┬───────┘ └────┬────┘ └────┬─────┘ └──────────────────────┘
-        │              │           │
-        ▼              ▼           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                        Data Layer                                │
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌───────┐ │
-│  │ MinIO   │  │ChromaDB │  │PostgreSQL│ │  Redis  │  │ Neo4j │ │
-│  │(Bronze/ │  │(Vectors)│  │(Metadata)│ │ (Cache) │  │(Graph)│ │
-│  │Silver/  │  │         │  │          │ │         │  │       │ │
-│  │Gold)    │  │         │  │          │ │         │  │       │ │
-│  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └───────┘ │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            Frontend (React)                                  │
+│                         http://localhost:3000                                │
+│  ┌───────────────────────────────┐  ┌───────────────────────────────────┐   │
+│  │         BI Interface          │  │          AI Interface             │   │
+│  │  • Dashboard Views            │  │  • Chat Interface                 │   │
+│  │  • Self-Service Analytics     │  │  • Document Upload                │   │
+│  │  • Report Viewer              │  │  • Smart Search                   │   │
+│  └───────────────────────────────┘  └───────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         Backend API (FastAPI)                                │
+│                         http://localhost:8000                                │
+├─────────────────────────────────┬───────────────────────────────────────────┤
+│        BI Services              │           AI Services                     │
+│  ┌───────────┐ ┌───────────┐    │    ┌───────────┐ ┌───────────────────┐   │
+│  │ Dashboard │ │   Self    │    │    │  Smart    │ │    RAG Chat       │   │
+│  │  Router   │ │  Service  │    │    │  Router   │ │    Service        │   │
+│  └───────────┘ └───────────┘    │    └───────────┘ └───────────────────┘   │
+│  ┌───────────┐ ┌───────────┐    │    ┌───────────┐ ┌───────────────────┐   │
+│  │  Report   │ │   Data    │    │    │ Summarize │ │    Compare        │   │
+│  │  Engine   │ │  Quality  │    │    │  Service  │ │    Service        │   │
+│  └───────────┘ └───────────┘    │    └───────────┘ └───────────────────┘   │
+└─────────────────────────────────┴───────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              Data Layer                                      │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────────┐ │
+│  │   MinIO   │ │ ChromaDB  │ │PostgreSQL │ │   Redis   │ │     Neo4j     │ │
+│  │  (Data    │ │ (Vector   │ │(Metadata  │ │  (Cache   │ │   (Knowledge  │ │
+│  │   Lake)   │ │  Store)   │ │   & BI)   │ │  & Jobs)  │ │     Graph)    │ │
+│  └───────────┘ └───────────┘ └───────────┘ └───────────┘ └───────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---

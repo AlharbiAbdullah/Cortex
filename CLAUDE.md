@@ -1,8 +1,13 @@
-# Cortex - Document Intelligence Platform
+# Cortex - Enterprise Intelligence Platform
 
 ## Project Overview
 
-Cortex is a document intelligence platform featuring RAG-powered chat, smart document routing, and automated data processing pipelines.
+Cortex is a unified enterprise intelligence platform that combines:
+
+1. **BI Platform** - Traditional Business Intelligence with dashboards, self-service analytics, and report generation
+2. **AI Platform** - Smart services including document routing, RAG-powered chat, summarization, and data quality assessment
+
+The platform delivers comprehensive data and intelligence capabilities for modern enterprises.
 
 ## Tech Stack
 
