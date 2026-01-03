@@ -14,6 +14,8 @@
 
 Cortex combines traditional Business Intelligence capabilities with cutting-edge AI services to deliver a comprehensive data and intelligence platform.
 
+![Cortex Landing Page](docs/images/landing-page.png)
+
 ---
 
 ## Platform Overview
